@@ -7,7 +7,7 @@ import com.pm.patient_service.model.Patient;
 import java.time.LocalDate;
 
 public class PatientMapper {
-    //Below method converts a Patient object to a Patient response DTO.
+    //Below method converts a Patient entity object to a Patient response DTO.
     public static PatientResponseDTO toDTO(Patient patient)
     {
         PatientResponseDTO patientDTO=new PatientResponseDTO();
@@ -19,10 +19,10 @@ public class PatientMapper {
         return patientDTO;
     }
 
-    //Below method converts a Patient response DTO to Patient object.
+    //Below method converts a Patient response DTO to Patient entity object.
     public static Patient toModel(PatientRequestDTO patientRequestDTO)
     {
-        //Below we are creating a Patient object from the DTO object --> patientRequestDTO
+        //Below we are creating a Patient entity object from the DTO object --> patientRequestDTO
         Patient patient= new Patient();
         patient.setName(patientRequestDTO.getName());//note: all this getName(), getAddress() etc are coming in from the patientRequestDTO and we passing it into the entity model
         patient.setAddress(patientRequestDTO.getAddress());
