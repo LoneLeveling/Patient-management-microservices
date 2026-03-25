@@ -1,2 +1,30 @@
 //GET request to get all patients
 GET http://localhost:4000/patients
+
+//Create a patient : POST
+POST http://localhost:4000/patients
+Content-type: application/json
+
+{
+  "name": "Abhishek Sharma",
+  "email": "abhi375@gmail.com",
+  "address": "Ecity Phase-1",
+  "registeredDate": "2026-03-25",
+  "dateOfBirth":"2000-02-22"
+}
+
+{
+  "name": "Akash Sharma",
+  "email": "akash23@gmail.com",
+  "address": "SKM nagar, MP",
+  "registeredDate": "2026-03-25",
+  "dateOfBirth":"2000-03-29"
+}
+
+{
+  "name": "Nitu Sharma",
+  "email": "nituS22@gmail.com",
+  "address": "BS Girls Hostel, HY",
+  "registeredDate": "2026-03-25",
+  "dateOfBirth":"2000-06-16"
+}
