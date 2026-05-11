@@ -26,9 +26,11 @@ public class PatientService
             =
             patients.stream().map(patient -> PatientMapper.toDTO(patient))
                     .toList();
-    //NOTE:  patients.stream().map() function is similar to a for loop which iterated over every item in a given list , patients list in our case
-    // For each patient the static toDTO method is called on the Mapper class and the result is added to the patientResponseDTO variable as a list.
-     //So at the end if we have 15 patients being returned from the repository ,
+    //NOTE:  patients.stream().map() function is similar to a for loop which
+       // iterated over every item in a given list , patients list in our case
+      // For each patient the static toDTO method is called on the Mapper class
+     // and the result is added to the patientResponseDTO variable as a list.
+     // So at the end if we have 15 patients being returned from the repository ,
      //then patientResponseDTOS variable will have 15 items in it as well.
     return patientResponseDTOS;
  }
