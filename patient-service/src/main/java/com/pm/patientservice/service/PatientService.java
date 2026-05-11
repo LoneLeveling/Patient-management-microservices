@@ -22,7 +22,8 @@ public class PatientService
  public List<PatientResponseDTO> getPatients()
  {
     List<Patient> patients=patientRepository.findAll();
-    List<PatientResponseDTO> patientResponseDTOS=
+    List<PatientResponseDTO> patientResponseDTOS //this DTO object contains all the properties that we want to sent to the frontend client.
+            =
             patients.stream().map(patient -> PatientMapper.toDTO(patient))
                     .toList();
     return patientResponseDTOS;
