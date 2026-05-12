@@ -16,6 +16,6 @@ public interface PatientRepository extends JpaRepository<Patient, UUID>
 // So JpaRepository<Patient, UUID> means:
 //=>"Create repository operations for Patient entity whose primary key type is UUID."
 {
-
+boolean existsByEmail(String email);
 
 }
