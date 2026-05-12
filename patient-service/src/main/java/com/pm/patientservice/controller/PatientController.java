@@ -35,11 +35,11 @@ public class PatientController {
 
     @PostMapping //We use post request anytime we are creating any stuff.
     public ResponseEntity<PatientResponseDTO> createPatient(@Valid @RequestBody PatientRequestDTO patientRequestDTO
-                                                           //@Valid validates the fields of patientRequestDTO to make sure all the properties matches the annotations that we used in the PatientRequestDTO object in dto package.
-                                                           //@RequestBody : This annotation coverts the json request to our PatientRequestDTO for us.
+                                                            //@Valid validates the fields of patientRequestDTO to make sure all the properties matches the annotations that we used in the PatientRequestDTO object in dto package.
+                                                            //@RequestBody : This annotation coverts the json request to our PatientRequestDTO for us.
     ) {
         PatientResponseDTO patientResponseDTO = patientService.createPatient(patientRequestDTO);
-    return ResponseEntity.ok().body(patientResponseDTO);
-    //NOTE: The reason why we returned patient response DTO back in POST request is bcz it's going to have the latest updated info. as it comes back from the db.
+        return ResponseEntity.ok().body(patientResponseDTO);
+        //NOTE: The reason why we returned patient response DTO back in POST request is bcz it's going to have the latest updated info. as it comes back from the db.
     }
 }
