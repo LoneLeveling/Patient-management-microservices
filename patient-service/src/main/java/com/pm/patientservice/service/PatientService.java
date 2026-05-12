@@ -1,5 +1,6 @@
 package com.pm.patientservice.service;
 
+import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
@@ -33,5 +34,21 @@ public class PatientService
      // So at the end if we have 15 patients being returned from the repository ,
      //then patientResponseDTOS variable will have 15 items in it as well.
     return patientResponseDTOS;
+ }
+
+ public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO)
+ {
+     //Converting patient request DTO into Patient Entity model object
+
+      Patient newPatinet = patientRepository.save //.save(called Mapper)
+              (PatientMapper.toModel(patientRequestDTO));
+      //Mapper.toModel() return a Patient object which is being passed into the
+     //save() function of the repository and then that gets persisted to the
+     // database, behind the scenes and we get a new Patient record created in the db.
+
+     //Once all this is done we can convert the newPatient variable to DTO
+     //and return it back to controller.
+
+     return PatientMapper.toDTO(newPatinet);
  }
 }
