@@ -41,7 +41,7 @@ public class PatientMapper
         //In above if you remove whats inside the argument and then hover over the argument
         //You will see its expecting a LocalDate datatype for dateOfBirth , since this data needs to be stored
         //In the db and the data type of this column is LocalDate, but the data that we received from the
-        // PatientRequestDTO is a String type, so we parse here above using the java builtin package.
+        // PatientRequestDTO is a String type, so we parse here above using the java built-in package.
 //Same logic for below:
         patient.setRegisteredDate(LocalDate.parse(patientRequestDTO.getRegisteredDate()));
     return patient;
