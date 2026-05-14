@@ -4,6 +4,8 @@ import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.dto.validators.CreatePatientValidationGroup;
 import com.pm.patientservice.service.PatientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.groups.Default;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-
+//This is the class where we have all of our End points.
 @RestController
 @RequestMapping("/patients") //http://localhost:4000/patients
+@Tag(name="Patient",description = "API for managing Patients") //Note: In the name we mention the Entity class name.
 public class PatientController {
     //Again we use below the DI concept since the controller class is dependent on the Service class,
     //just how the Service class is dependent on the Patient repository class.
@@ -26,6 +29,7 @@ public class PatientController {
 
 
     @GetMapping//This means this method handles all the GET requests
+    @Operation(summary = "Get  Patients")
     public ResponseEntity<List<PatientResponseDTO>> getPatients() {//Below we need to call the Patient Service layer to get all the patients
         List<PatientResponseDTO> patients = patientService.getPatients();
         return ResponseEntity.ok().body(patients);
@@ -37,6 +41,7 @@ public class PatientController {
     }
 
     @PostMapping //We use post request anytime we are creating any stuff.
+    @Operation(summary = "Create a new Patient")
     public ResponseEntity<PatientResponseDTO> createPatient
             (@Validated({Default.class, CreatePatientValidationGroup.class}) @RequestBody PatientRequestDTO patientRequestDTO
      //@Valid validates the fields of patientRequestDTO to make sure all the properties matches the annotations that we used in the PatientRequestDTO object in dto package.
@@ -50,6 +55,7 @@ public class PatientController {
     @PutMapping("/{id}") //NOTE: Anytime we are updating an Entity we use put request and any time we use a PUT request
     // we use it in association with an 'id' so that we know the id of the entity that we are going to update.
     //The UUID received is converted to an 'id' variable which is then passed to the update Patient method which handles the request.
+    @Operation(summary = "Update a Patient")
     public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable UUID id,  //This @PathVariable annotation tells spring that this 'id' is the variable that we want to map to the path variable that we received in PUT request.
                                                             @Validated({Default.class}) @RequestBody PatientRequestDTO patientRequestDTO) //This lines means that the updated patient data that we receive in the body of the request as JSON is going to get assigned to patient request DTO.
     //NOTE: @Validated({Default.class})--> Tells spring to validate the request using all the defaults that we specify in the DTO
@@ -62,6 +68,7 @@ public class PatientController {
 
     //CREATING A DELETE END POINT
     @DeleteMapping("/{id}") //Note: below in <> we have Void since this method does not return anything
+    @Operation(summary = "Delete a Patient")
     public ResponseEntity<Void> deletePatient(@PathVariable UUID id)
     {
     patientService.deletePatient(id);
