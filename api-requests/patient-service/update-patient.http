@@ -1,0 +1,13 @@
+### Updates an exisiting Patient Entity
+PUT http://localhost:4000/patients/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "name": "lokja lupa",
+  "address": "10th cross road NLD",
+  "email": "john.llko@gmail.com",
+  "dateOfBirth": "1905-06-15"
+
+}
+###
+contr

@@ -3,6 +3,7 @@ package com.pm.patientservice.dto;
 //In this class we add all the properties that we expect to receive in the body
 // of the request from client whenever we create a new Patient.
 
+import com.pm.patientservice.dto.validators.CreatePatientValidationGroup;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,12 +26,12 @@ public class PatientRequestDTO {
     @NotBlank(message = "Date of Birth is required")
     private String dateOfBirth;
 
-    @NotNull(message = "Registered date is required")
+    @NotBlank(groups = CreatePatientValidationGroup.class, message = "Registered date is required")
     private String registeredDate;
     //Even though we do not send registered date back in patientResponse DTO
     //we still need a way for admins of our Patient management to enter in a registered date
     //So on the frontend when we build the form the admin will be able to add a
-    //Patient along with the registered date but we do not return patient registered date in response dto, we keep tit hidden,
+    //Patient along with the registered date but we do not return patient registered date in response dto, we keep tit h idden,
     //this is the reason why we keep patient request and response DTO different in case
     //we need to change the data that gets input Vs the data that gets returned.
 
@@ -39,7 +40,8 @@ public class PatientRequestDTO {
         return registeredDate;
     }
 
-    public void setRegisteredDate(String registeredDate) {
+    public void setRegisteredDate(
+          String registeredDate) {
         this.registeredDate = registeredDate;
     }
 

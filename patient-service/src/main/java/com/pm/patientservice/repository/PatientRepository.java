@@ -17,5 +17,5 @@ public interface PatientRepository extends JpaRepository<Patient, UUID>
 //=>"Create repository operations for Patient entity whose primary key type is UUID."
 {
 boolean existsByEmail(String email);
-
+boolean existsByEmailAndIdNot(String email, UUID id);
 }

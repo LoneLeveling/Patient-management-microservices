@@ -8,6 +8,7 @@ import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -70,7 +71,12 @@ public class PatientService {
         //& we are going to create the below custom exception.
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + id));
 
-        if (patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
+        //checking if there's another patient in the db with the same Email
+        // as the one we are trying to update but with a different id and
+        // if patient exists below method throws an error.
+        //So this logic helps us stop JPA from incorrectly flagging an email as duplicate even if we are trying to update the same record
+        if (patientRepository.existsByEmailAndIdNot(patientRequestDTO.getEmail(),id))
+        {
             throw new EmailAlreadyExistsException("A patient with this email " + "already exists " + patientRequestDTO.getEmail());
         }
 
@@ -88,5 +94,11 @@ public class PatientService {
         //Now we need to return the updated DTO object as a json back to the controller, so that it can complete the request:
         return PatientMapper.toDTO(patient);
 
+    }
+
+
+    public void  deletePatient(UUID id)
+    {
+        patientRepository.deleteById(id);
     }
 }
