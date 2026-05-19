@@ -1,0 +1,8 @@
+GRPC localhost:9001/BillingService/CreateBillingAccount
+#SYNTAX: GRPC Address Of the Server/Name of the Service/Name of the RPC method
+
+{
+"patientId": "12333",
+  "name": "John doe",
+  "email": "john.doe@gmail.com"
+}
