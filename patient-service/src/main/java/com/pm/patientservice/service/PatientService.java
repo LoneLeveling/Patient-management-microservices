@@ -4,6 +4,7 @@ import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.exception.EmailAlreadyExistsException;
 import com.pm.patientservice.exception.PatientNotFoundException;
+import com.pm.patientservice.grpc.BillingServiceGrpcClient;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.PatientRepository;
@@ -18,11 +19,13 @@ import java.util.UUID;
 @Service
 public class PatientService {
     private final PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
     // Spring injects PatientRepository dependency through constructor Injection
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
 
         this.patientRepository = patientRepository;
+        this.billingServiceGrpcClient=billingServiceGrpcClient;
     }
 
     //NOTE: Service layer converts our domain entity model into Response DTO
@@ -55,6 +58,16 @@ public class PatientService {
         //Mapper.toModel() return a Patient object which is being passed into the
         //save() function of the repository and then that gets persisted to the
         // database, behind the scenes and we get a new Patient record created in the db.
+
+
+        //Creating the patient's billing account post saving the user in db:
+        //And we fetch the data from above newly created patient 'newPatient'
+        billingServiceGrpcClient.creatBillingAccount(
+                newPatinet.getId().toString(), //toString to convert UUID type to String type
+                newPatinet.getName(),
+                newPatinet.getEmail());
+
+
 
         //Once all this is done we can convert the newPatient variable to DTO
         //and return it back to controller.
