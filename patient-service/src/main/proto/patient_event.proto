@@ -1,0 +1,21 @@
+//NOTE: This is a proto file that we use to determine the format of
+//a patient event that get sent from a Kafka producer to a kafka topic.
+
+syntax="proto3";
+
+package patient.events;
+
+option java_multiple_files=true;
+//Above just tells the maven-plugin that we want to generate separate files
+//instead of having all of the classes generated under a single parent class
+// which can sometimes make, it harder to work with.
+
+message PatientEvent{
+  string patientId=1;
+  string name=2;
+  string email=3;
+  string event_type=4;
+}
+
+//Above is the exact same thing that will be consumed in our
+// analytics-service's kafka consumer from the kafka topic.

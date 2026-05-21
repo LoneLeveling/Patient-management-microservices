@@ -5,6 +5,7 @@ import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.exception.EmailAlreadyExistsException;
 import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.grpc.BillingServiceGrpcClient;
+import com.pm.patientservice.kafka.KafkaProducer;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.PatientRepository;
@@ -20,13 +21,16 @@ import java.util.UUID;
 public class PatientService {
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
     // Spring injects PatientRepository dependency through constructor Injection
-    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient, KafkaProducer kafkaProducer) {
 
         this.patientRepository = patientRepository;
         this.billingServiceGrpcClient=billingServiceGrpcClient;
+        this.kafkaProducer=kafkaProducer;
     }
+
 
     //NOTE: Service layer converts our domain entity model into Response DTO
     //And the patient response DTO has the properties that we want the client to see.
@@ -60,13 +64,21 @@ public class PatientService {
         // database, behind the scenes and we get a new Patient record created in the db.
 
 
-        //Creating the patient's billing account post saving the user in db:
-        //And we fetch the data from above newly created patient 'newPatient'
+        //Creating the patient's billing account post saving the user in db,
+        //by making a GRPC request to the billing service in order to create
+        //a billing account or the patient and we are sending some of the
+        // Patient properties as part of the grpc request i.e,
+        // newPatinet.getId().toString(),newPatinet.getName(),newPatinet.getEmail());
+        // And lastly all being well we are returning the new Patient back to the client that made the rest request in json format using a DTO
+        //i.e.,         return PatientMapper.toDTO(newPatinet);
+        //So it makes sense in here that we send the kafka event to the topic at this point as well
         billingServiceGrpcClient.creatBillingAccount(
                 newPatinet.getId().toString(), //toString to convert UUID type to String type
                 newPatinet.getName(),
                 newPatinet.getEmail());
 
+//So after the billing service call has completed, we add kafka part below:
+       kafkaProducer.sendEvent(newPatinet);
 
 
         //Once all this is done we can convert the newPatient variable to DTO
