@@ -1,0 +1,100 @@
+server:
+  port: 4004
+
+spring:
+  cloud:
+    gateway:
+      routes:
+
+        # =========================================================
+        # PATIENT SERVICE ROUTE
+        # =========================================================
+        #
+        # CLIENT REQUEST FLOW:
+        #
+        # REST CLIENT / FRONTEND:
+        # http://localhost:4004/api/patients
+        #
+        # Request first lands on:
+        # --> API Gateway
+        #
+        # API Gateway checks all configured routes and
+        # matches the request using the Predicate rule below:
+        #
+        # Path=/api/patients/**
+        #
+        # Once matched, Gateway forwards the request to:
+        # --> http://patient-service:4000
+        #
+        # FILTER:
+        # StripPrefix=1
+        #
+        # This removes the first path segment:
+        #
+        # BEFORE:
+        # /api/patients
+        #
+        # AFTER:
+        # /patients
+        #
+        # Final forwarded request becomes:
+        # --> http://patient-service:4000/patients
+        #
+        # Now the Patient Service Spring Boot application
+        # receives the request and its controller handles:
+        #
+        # @RequestMapping("/patients")
+        #
+        # So API Gateway acts like a traffic controller /
+        # reverse proxy between client and microservices.
+        #
+        # =========================================================
+
+        - id: patient-service-route
+          uri: http://patient-service:4000
+
+          predicates:
+            - Path=/api/patients/**
+
+          filters:
+            - StripPrefix=1
+
+        # =========================================================
+        # SWAGGER / OPENAPI DOCS ROUTE
+        # =========================================================
+        #
+        # CLIENT REQUEST:
+        # http://localhost:4004/api-docs/patients
+        #
+        # API Gateway receives this request and forwards it to:
+        #
+        # http://patient-service:4000/v3/api-docs
+        #
+        # FILTER:
+        # RewritePath
+        #
+        # This rewrites:
+        #
+        # BEFORE:
+        # /api-docs/patients
+        #
+        # AFTER:
+        # /v3/api-docs
+        #
+        # This is useful because:
+        #
+        # - Clients should not directly call microservices
+        # - API Gateway becomes the single entry point
+        # - Swagger docs of all microservices can be exposed
+        #   through one unified gateway
+        #
+        # =========================================================
+
+        - id: api-docs-patient-route
+          uri: http://patient-service:4000
+
+          predicates:
+            - Path=/api-docs/patients
+
+          filters:
+            - RewritePath=/api-docs/patients,/v3/api-docs

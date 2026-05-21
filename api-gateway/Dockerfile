@@ -1,0 +1,22 @@
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
+#Above line helps create the api-gateway-0.0.1-SNAPSHOT.jar
+WORKDIR /app
+
+COPY pom.xml .
+
+RUN mvn dependency:go-offline -B
+
+COPY src ./src
+
+RUN mvn clean package
+
+FROM eclipse-temurin:21-jre  AS runner
+
+WORKDIR /app
+
+COPY --from=builder ./app/target/api-gateway-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 4004
+#Port where the app i.e., api-gateway runs/hosted
+
+ENTRYPOINT ["java", "-jar","app.jar"]
