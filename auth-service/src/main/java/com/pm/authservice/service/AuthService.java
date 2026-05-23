@@ -10,12 +10,13 @@ import java.util.Optional;
 @Service
 public class AuthService {
 
-    private final PasswordEncoder passwordEncoder;
+
 
     //Now here we need to call the UserService to find the user by email as we receive it in the
     //backend request DTO,So we use the DI approach,
     // i.e.,  we inject the UserService class into the AuthService class using DI same as how we injected Repository layer into UserService class
 private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 public AuthService(UserService userService, PasswordEncoder passwordEncoder)
 {
     this.userService=userService;
@@ -36,6 +37,7 @@ public AuthService(UserService userService, PasswordEncoder passwordEncoder)
                   u.getPassword()))
           .map(u->jwtUtil.generateToken(u.getEmail(),u.getRole()));
 
-  return token;
+   return token;
+
     }
 }
