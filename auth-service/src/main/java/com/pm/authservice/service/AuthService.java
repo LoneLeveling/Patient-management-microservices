@@ -2,6 +2,7 @@ package com.pm.authservice.service;
 
 import com.pm.authservice.dto.LoginRequestDTO;
 import com.pm.authservice.model.User;
+import com.pm.authservice.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,12 @@ public class AuthService {
     // i.e.,  we inject the UserService class into the AuthService class using DI same as how we injected Repository layer into UserService class
 private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-public AuthService(UserService userService, PasswordEncoder passwordEncoder)
+    private final JwtUtil jwtUtil;
+public AuthService(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil)
 {
     this.userService=userService;
     this.passwordEncoder=passwordEncoder;
+    this.jwtUtil=jwtUtil;
 }
 
 
