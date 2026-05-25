@@ -1,0 +1,11 @@
+### GET request to validate token
+#GET http://localhost:4005/validate
+#4005=auth service endpoint port, 4004=API GATEWAY port
+GET http://localhost:4004/auth/validate
+
+
+#If request is:localhost:4004/auth/validate/token
+#Forwarded to:http://auth-service:4005/validate/token
+
+
+Authorization: Bearer {{token}}}

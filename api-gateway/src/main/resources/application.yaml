@@ -9,11 +9,14 @@ spring:
         - id: auth-service-route
           uri: http://auth-service:4005
           predicates:
-            - Path=/auth/**
+            - Path=/auth/** #This line means:If incoming request starts with /auth/, this route should handle it.
           filters:
-            - StripPref-1
+            - StripPref=1 #This line means:Remove the first path segment before forwarding.
 
-
+#If request is:localhost:4004/auth/validate/token
+#After StripPrefix=1:
+#  /validate/token
+#Forwarded to:http://auth-service:4005/validate/token
 
 
         # =========================================================

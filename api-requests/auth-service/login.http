@@ -1,5 +1,7 @@
 #Login Request to reterive a token
-POST http://localhost:4005/login
+#POST http://localhost:4005/login
+#4005=auth service port, 4005 = API GATEWAY port
+POST http://localhost:4004/auth/login
 content-Type: application/json
 
 {
