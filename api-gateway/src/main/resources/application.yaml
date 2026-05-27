@@ -71,6 +71,11 @@ spring:
 
           filters:
             - StripPrefix=1
+            - JwtValidation
+#By putting JwtValidation above we make sure that the patient service is not directly accessed unless the
+#request goes through the API Gateway and that the token validation proves that the token is valid and has come from
+#our Auth service.
+
 
         # =========================================================
         # SWAGGER / OPENAPI DOCS ROUTE
